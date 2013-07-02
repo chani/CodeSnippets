@@ -1,0 +1,10 @@
+div {
+    margin-bottom: 2em;
+}
+
+span.timePart span {
+    background: #c0c0c0;
+    margin: 0 0 0 1px;
+    padding: 0.3em;
+    border-radius: 3px;
+}
