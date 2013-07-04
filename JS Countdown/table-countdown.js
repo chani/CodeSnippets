@@ -11,9 +11,16 @@ function updateSingleCountdown(counterIndex) {
     var counterId = countDowns[counterIndex].id;
     var targetElement = document.getElementById(countDownsPrefix + counterId);
     if (targetElement) {
+        var oldDays = countDowns[counterIndex].obj.d;
         countDowns[counterIndex].obj.decrease();
+        if ((oldDays > 0) && (countDowns[counterIndex].obj.d == 0)) {
+            for (var i = timeElem.children.length; i >= 0; --i) {
+                timeElem.children[i].remove();
+            }
+        }
+        var showDaysPart = (timeElem.className.indexOf('showDays') > -1) && (countDowns[counterIndex].obj.d > 0);        
         if ((targetElement.children.length == 0) || (targetElement.children[0].children[1].length < 5)) {
-            initializeCountdownOutput(counterId);
+            initializeCountdownOutput(counterId, showDaysPart);
         }
         updateCounterOutput(targetElement, countDowns[counterIndex].obj);
         if (countDowns[counterIndex].obj.isFinished()) {
@@ -22,15 +29,15 @@ function updateSingleCountdown(counterIndex) {
     }
 }
 
-function initializeCountdownOutput(id) {
+function initializeCountdownOutput(id, showDaysPart) {
     var hoursElem = createCountdownField('hours');
     var minutesElem = createCountdownField('minutes')
-    var secondsElem = createCountdownField('seconds');
+    var secondsElem = createCountdownField('seconds');    
 
     var timeElem = document.getElementById(countDownsPrefix + id);
     if (timeElem) {
         var trElem = document.createElement('tr');        
-        if (timeElem.className.indexOf('showDays') > -1) {
+        if (showDaysPart) {
             var daysElem = createCountdownField('days');
             trElem.appendChild(daysElem);
             trElem.appendChild(createDaysElement());
@@ -42,7 +49,7 @@ function initializeCountdownOutput(id) {
         trElem.appendChild(secondsElem);
         var tableElem = document.createElement('table');
         tableElem.className = 'countdownTable';
-        tableElem.appendChild(createCountdownTableHead(timeElem.className.indexOf('showDays') > -1));
+        tableElem.appendChild(createCountdownTableHead(showDaysPart));
         tableElem.appendChild(trElem);
         timeElem.appendChild(tableElem);
     }
@@ -86,9 +93,9 @@ function createDaysElement() {
     return daysElement;
 }
 
-function updateCounterOutput(targetElement, obj) {
-    if (targetElement.className.indexOf('showDays') > -1) {
-        var d = obj.formatTimeValue(obj.d);
+function updateCounterOutput(targetElement, obj) {    
+    if ((targetElement.className.indexOf('showDays') > -1) && (obj.d > 0)) {        
+        var d = obj.formatTimeValue(obj.d);    
         var h = obj.formatTimeValue(obj.h);
         var m = obj.formatTimeValue(obj.m);
         var s = obj.formatTimeValue(obj.s);
