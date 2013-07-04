@@ -14,11 +14,11 @@ function updateSingleCountdown(counterIndex) {
         var oldDays = countDowns[counterIndex].obj.d;
         countDowns[counterIndex].obj.decrease();
         if ((oldDays > 0) && (countDowns[counterIndex].obj.d == 0)) {
-            for (var i = timeElem.children.length; i >= 0; --i) {
-                timeElem.children[i].remove();
+            for (var i = targetElement.children.length - 1; i >= 0; --i) {
+                targetElement.children[i].remove();
             }
         }
-        var showDaysPart = (timeElem.className.indexOf('showDays') > -1) && (countDowns[counterIndex].obj.d > 0);        
+        var showDaysPart = (targetElement.className.indexOf('showDays') > -1) && (countDowns[counterIndex].obj.d > 0);        
         if ((targetElement.children.length == 0) || (targetElement.children[0].children[1].length < 5)) {
             initializeCountdownOutput(counterId, showDaysPart);
         }
