@@ -42,7 +42,7 @@ function initializeCountdownOutput(id) {
         trElem.appendChild(secondsElem);
         var tableElem = document.createElement('table');
         tableElem.className = 'countdownTable';
-        tableElem.appendChild(createCountdownTableHead(timeElem.className.indexOf('showDays') > -1);
+        tableElem.appendChild(createCountdownTableHead(timeElem.className.indexOf('showDays') > -1));
         tableElem.appendChild(trElem);
         timeElem.appendChild(tableElem);
     }
