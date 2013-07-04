@@ -29,7 +29,7 @@ function initializeCountdownOutput(id) {
 
     var timeElem = document.getElementById(countDownsPrefix + id);
     if (timeElem) {
-        if (timeElem.className == 'showDays') {
+        if (timeElem.className.indexOf('showDays') > -1) {
             var daysElem = createCountdownField('days');
             timeElem.appendChild(daysElem);
             timeElem.appendChild(createDaysElement());
@@ -55,7 +55,7 @@ function createDaysElement() {
 }
 
 function updateCounterOutput(targetElement, obj) {
-    if (targetElement.className == 'showDays') {
+    if (targetElement.className.indexOf('showDays') > -1) {
         var d = obj.formatTimeValue(obj.d);
         var h = obj.formatTimeValue(obj.h);
         var m = obj.formatTimeValue(obj.m);
