@@ -67,11 +67,20 @@ function initializeDivCountdownOutput(timeElem, showDaysPart) {
         timeElem.appendChild(daysElem);
         timeElem.appendChild(createDaysElement(false));
     }
-    timeElem.appendChild(hoursElem);
-    timeElem.appendChild(createColonElement(false));
-    timeElem.appendChild(minutesElem);
-    timeElem.appendChild(createColonElement(false));
-    timeElem.appendChild(secondsElem);
+    if (timeElem.className.indexOf('showUnits') > -1) {
+        timeElem.appendChild(hoursElem);
+        timeElem.appendChild(createUnitElement(' Std. '));
+        timeElem.appendChild(minutesElem);
+        timeElem.appendChild(createUnitElement(' Min. '));
+        timeElem.appendChild(secondsElem);
+        timeElem.appendChild(createUnitElement(' Sek.'));
+    } else {
+        timeElem.appendChild(hoursElem);
+        timeElem.appendChild(createColonElement(false));
+        timeElem.appendChild(minutesElem);
+        timeElem.appendChild(createColonElement(false));
+        timeElem.appendChild(secondsElem);
+    }
 }
 
 function initializeTableCountdownOutput(timeElem, showDaysPart) {
@@ -132,6 +141,13 @@ function createDaysElement(isTableField) {
     daysElement.textContent = (isTableField) ? ' ' : ' Tage ';
     daysElement.className = 'daysElement';
     return daysElement;
+}
+
+function createUnitElement(label) {
+    var unitElement = document.createElement('span');
+    unitElement.textContent = label;
+    unitElement.className = 'unitElement';
+    return unitElement;
 }
 
 function updateCounterOutput(targetElement, obj) {    
