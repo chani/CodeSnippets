@@ -11,14 +11,20 @@
             var countDownsPrefix = 'countdown_';
             var countDowns = new Array();
 			countDowns[0] = { id:80, obj:new Countdown(182, 06, 55, 52) };
-			countDowns[1] = { id:41, obj:new Countdown(60, 06, 55, 52) };
-			countDowns[2] = { id:79, obj:new Countdown(48, 06, 55, 52) };
+			countDowns[1] = { id:41, obj:new Countdown(1, 0, 0, 30) };
+			countDowns[2] = { id:79, obj:new Countdown(0, 06, 55, 52) };
+            countDowns[3] = { id:81, obj:new Countdown(182, 06, 55, 52) };
+			countDowns[4] = { id:42, obj:new Countdown(1, 0, 0, 30) };
+			countDowns[5] = { id:91, obj:new Countdown(0, 6, 55, 52) };
             
             updateCountdowns();
         </script>
         
         <div id="countdown_80"></div>
         <div id="countdown_41" class="showDays"></div>
-        <div id="countdown_79"></div>
+        <div id="countdown_79" class="showDays"></div>
+        <table id="countdown_81"></table>
+        <table id="countdown_42" class="showDays"></table>
+        <table id="countdown_91" class="showDays"></table>
     </body>
 </html>

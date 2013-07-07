@@ -10,10 +10,16 @@ function updateCountdowns() {
 function updateSingleCountdown(counterIndex) {
     var counterId = countDowns[counterIndex].id;
     var targetElement = document.getElementById(countDownsPrefix + counterId);
-    if (targetElement) {
+    if (targetElement) {        
+        var oldDays = countDowns[counterIndex].obj.d;
         countDowns[counterIndex].obj.decrease();
-        if (targetElement.children.length < 5) {
-            initializeCountdownOutput(counterId);
+        if ((oldDays > 0) && (countDowns[counterIndex].obj.d == 0)) {
+            removeCountdownOutput(targetElement);
+        }
+        
+        var showDaysPart = (targetElement.className.indexOf('showDays') > -1) && (countDowns[counterIndex].obj.d > 0);  
+        if (!isCountdownInitialized(counterId)) {
+            initializeCountdownOutput(counterId, showDaysPart);
         }
         updateCounterOutput(targetElement, countDowns[counterIndex].obj);
         if (countDowns[counterIndex].obj.isFinished()) {
@@ -22,49 +28,132 @@ function updateSingleCountdown(counterIndex) {
     }
 }
 
-function initializeCountdownOutput(id) {
-    var hoursElem = createCountdownField('hours');
-    var minutesElem = createCountdownField('minutes')
-    var secondsElem = createCountdownField('seconds');
-
-    var timeElem = document.getElementById(countDownsPrefix + id);
-    if (timeElem) {
-        if (timeElem.className.indexOf('showDays') > -1) {
-            var daysElem = createCountdownField('days');
-            timeElem.appendChild(daysElem);
-            timeElem.appendChild(createDaysElement());
-        }
-        timeElem.appendChild(hoursElem);
-        timeElem.appendChild(createColonElement());
-        timeElem.appendChild(minutesElem);
-        timeElem.appendChild(createColonElement());
-        timeElem.appendChild(secondsElem);
+function removeCountdownOutput(targetElement) {
+    for (var i = targetElement.children.length - 1; i >= 0; --i) {
+        targetElement.children[i].remove();
     }
 }
 
-function createColonElement() {
-    var colonElement = document.createElement('span');
+function isCountdownInitialized(id) {
+    var targetElement = document.getElementById(countDownsPrefix + id);
+    if (targetElement.nodeName.toLowerCase() == 'div') {
+        return (targetElement.children.length >= 5);
+    }
+    else if (targetElement.nodeName.toLowerCase() == 'table') {
+        return ((targetElement.children.length > 1) && (targetElement.children[1].children.length >= 5));
+    }
+    else {
+        return false;
+    }
+}
+
+function initializeCountdownOutput(id, showDaysPart) {    
+    var timeElem = document.getElementById(countDownsPrefix + id);
+    if (timeElem && (timeElem.nodeName.toLowerCase() == 'div')) {
+        initializeDivCountdownOutput(timeElem, showDaysPart);
+    }
+    else if (timeElem && (timeElem.nodeName.toLowerCase() == 'table')) {
+        initializeTableCountdownOutput(timeElem, showDaysPart);
+    }
+}
+
+function initializeDivCountdownOutput(timeElem, showDaysPart) {
+    var hoursElem = createCountdownField('hours', false);
+    var minutesElem = createCountdownField('minutes', false)
+    var secondsElem = createCountdownField('seconds', false);
+    
+    if (showDaysPart) {
+        var daysElem = createCountdownField('days', false);
+        timeElem.appendChild(daysElem);
+        timeElem.appendChild(createDaysElement(false));
+    }
+    timeElem.appendChild(hoursElem);
+    timeElem.appendChild(createColonElement(false));
+    timeElem.appendChild(minutesElem);
+    timeElem.appendChild(createColonElement(false));
+    timeElem.appendChild(secondsElem);
+}
+
+function initializeTableCountdownOutput(timeElem, showDaysPart) {
+    var hoursElem = createCountdownField('hours', true);
+    var minutesElem = createCountdownField('minutes', true)
+    var secondsElem = createCountdownField('seconds', true);
+    
+    var trElem = document.createElement('tr');        
+    if (showDaysPart) {
+        var daysElem = createCountdownField('days', true);
+        trElem.appendChild(daysElem);
+        trElem.appendChild(createDaysElement(true));
+    }
+    trElem.appendChild(hoursElem);
+    trElem.appendChild(createColonElement(true));
+    trElem.appendChild(minutesElem);
+    trElem.appendChild(createColonElement(true));
+    trElem.appendChild(secondsElem);
+    timeElem.appendChild(createCountdownTableHead(showDaysPart));
+    timeElem.appendChild(trElem);
+}
+
+function createCountdownTableHead(showDaysPart) {
+    var trElem = document.createElement('tr');
+    var thElem = null;
+    if (showDaysPart) {
+        thElem = document.createElement('th');
+        thElem.textContent = 'Tage';
+        trElem.appendChild(thElem);
+        thElem = document.createElement('th');
+        trElem.appendChild(thElem);
+    }
+    thElem = document.createElement('th');
+    thElem.textContent = 'H';
+    trElem.appendChild(thElem);
+    thElem = document.createElement('th');
+    trElem.appendChild(thElem);
+    thElem = document.createElement('th');
+    thElem.textContent = 'M';
+    trElem.appendChild(thElem);
+    thElem = document.createElement('th');
+    trElem.appendChild(thElem);
+    thElem = document.createElement('th');
+    thElem.textContent = 'S';
+    trElem.appendChild(thElem);
+    return trElem;
+}
+
+function createColonElement(isTableField) {
+    var colonElement = (isTableField) ? document.createElement('td') : document.createElement('span');
     colonElement.textContent = ':';
+    colonElement.className = 'colonElement';
     return colonElement;
 }
 
-function createDaysElement() {
-    var daysElement = document.createElement('span');
-    daysElement.textContent = ' Tage ';
+function createDaysElement(isTableField) {
+    var daysElement = (isTableField) ? document.createElement('td') : document.createElement('span');
+    daysElement.textContent = (isTableField) ? ' ' : ' Tage ';
+    daysElement.className = 'daysElement';
     return daysElement;
 }
 
-function updateCounterOutput(targetElement, obj) {
-    if (targetElement.className.indexOf('showDays') > -1) {
+function updateCounterOutput(targetElement, obj) {    
+    var showDaysPart = (targetElement.className.indexOf('showDays') > -1) && (obj.d > 0);
+    if (showDaysPart) {
         var d = obj.formatTimeValue(obj.d);
         var h = obj.formatTimeValue(obj.h);
         var m = obj.formatTimeValue(obj.m);
         var s = obj.formatTimeValue(obj.s);
 
-        updateCounterField(targetElement.children[0], d);
-        updateCounterField(targetElement.children[2], h);
-        updateCounterField(targetElement.children[4], m);
-        updateCounterField(targetElement.children[6], s);
+        if (isDivCountdownView(targetElement)) {
+            updateCounterField(targetElement.children[0], d);
+            updateCounterField(targetElement.children[2], h);
+            updateCounterField(targetElement.children[4], m);
+            updateCounterField(targetElement.children[6], s);
+        }
+        else if (isTableCountdownView(targetElement)) {
+            updateCounterField(targetElement.children[1].children[0], d);
+            updateCounterField(targetElement.children[1].children[2], h);
+            updateCounterField(targetElement.children[1].children[4], m);
+            updateCounterField(targetElement.children[1].children[6], s);
+        }
     } else {
         var hoursIncludingDays = obj.h + obj.d * 24;
 
@@ -72,10 +161,25 @@ function updateCounterOutput(targetElement, obj) {
         var m = obj.formatTimeValue(obj.m);
         var s = obj.formatTimeValue(obj.s);
 
-        updateCounterField(targetElement.children[0], h);
-        updateCounterField(targetElement.children[2], m);
-        updateCounterField(targetElement.children[4], s);
+        if (isDivCountdownView(targetElement)) {
+            updateCounterField(targetElement.children[0], h);
+            updateCounterField(targetElement.children[2], m);
+            updateCounterField(targetElement.children[4], s);
+        }
+        else if (isTableCountdownView(targetElement)) {
+            updateCounterField(targetElement.children[1].children[0], h);
+            updateCounterField(targetElement.children[1].children[2], m);
+            updateCounterField(targetElement.children[1].children[4], s);
+        }
     }
+}
+
+function isTableCountdownView(targetElement) {
+    return targetElement.nodeName.toLowerCase() == 'table';
+}
+
+function isDivCountdownView(targetElement) {
+    return targetElement.nodeName.toLowerCase() == 'div';
 }
 
 function updateCounterField(targetElement, timeString) {
@@ -100,8 +204,8 @@ function adjustChildrenCount(targetElement, length) {
     }
 }
 
-function createCountdownField(fieldName) {
-    var field = document.createElement('span');
+function createCountdownField(fieldName, isTableField) {
+    var field = (isTableField) ? document.createElement('td') : document.createElement('span');
     field.className = 'timePart ' + fieldName;
     return field;
 }
