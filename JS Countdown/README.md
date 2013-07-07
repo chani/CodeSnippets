@@ -43,5 +43,8 @@ Usage
    
         <div id="countdown_1" class="showDays"></div>
         
-6. The output is fully customizable by using CSS. Every part of the output has a clearly
+6. If you want to show the time units instead of colons between the fields you can add the
+   CSS class `showUnits`. This works only for the `<div>` view and not for `<table>`, however.
+        
+7. The output is fully customizable by using CSS. Every part of the output has a clearly
    defined CSS class or path.
