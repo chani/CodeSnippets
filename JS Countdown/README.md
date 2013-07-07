@@ -10,7 +10,7 @@ a homepage. There are two different variations of this countdown:
 Usage
 -----
 
-1. Add one of the scripts to your page:
+1. Add the script to your page:
 
         <script type="text/javascript" src="countdown.js"></script>
      
@@ -26,6 +26,11 @@ Usage
 3. Add locations for the countdowns to be displayed:
 
         <div id="countdown_1"></div>
+        <table id="countdown_2"></table>
+        
+    The type of tag you use defines the way it is being displayed. In a `<div>` tag the
+    countdown will be shown on one line, while in `<table>` there will be two lines with
+    headers for each field.
         
 4. Use jQuery or something similar to initialize and start the countdowns:
 
