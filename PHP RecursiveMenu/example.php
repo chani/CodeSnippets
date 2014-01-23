@@ -1,5 +1,5 @@
 <?php
-include("RecursiveMenu.php");
+include("RecursiveMenu.class.php");
 
 // setup database connection
 $db = new PDO("mysql:dbname=test;host=localhost", "test", "test");
