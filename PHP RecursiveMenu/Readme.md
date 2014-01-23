@@ -11,20 +11,6 @@ Features
 
 - Shows a tree of indefinite depth
 - Every node is annotated with the number of items located in the subtree
-
-Example
--------
-
-1. Import `example.sql` into your database
-2. Change the database credentials in `example.php`
-3. Open `example.php` via your PHP-enabled webserver
-4. The output should look like this:
-
-    - Test 1 (4)
-      - Test 1.1 (2)
-      - Test 1.2 (0)
-    - Test 2 (0)
-      - Test 2.1 (0)
       
 Usage
 -----
@@ -44,3 +30,17 @@ Now all you need to do is assemble the menu and render it:
     $menu->assemble()->render();
     
 To customize the output, change `RecursiveMenuEntry::render()` and `RecursiveMenuEntry::renderRecursively()`.
+
+Example
+-------
+
+1. Import `example.sql` into your database
+2. Change the database credentials in `example.php`
+3. Open `example.php` via your PHP-enabled webserver
+4. The output should look like this:
+
+    - Test 1 (4)
+      - Test 1.1 (2)
+      - Test 1.2 (0)
+    - Test 2 (0)
+      - Test 2.1 (0)
