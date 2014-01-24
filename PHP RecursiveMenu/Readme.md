@@ -27,7 +27,7 @@ Initialize the menu with a PDO instance pointing to your database:
     
 Now all you need to do is assemble the menu and render it:
 
-    $menu->assemble()->render();
+    echo $menu->assemble()->render();
     
 To customize the output, change `RecursiveMenuEntry::render()` and `RecursiveMenuEntry::renderRecursively()`.
 
