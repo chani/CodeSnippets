@@ -15,19 +15,48 @@ Features
 Usage
 -----
 
-The implementation expects two tables `products` and `catalogs`, where:
+The implementation expects four arrays consisting of products, products2pid,
+catalogs and catalogs2pid. Imagine the following tables:
 
 - `products` contains a column `pid` that contains values of `catalogs.id`
 - `catalogs` contains a column `pid` that contains values of `catalogs.id`
 - `catalogs` contains a coumn `name`
 
-Initialize the menu with a PDO instance pointing to your database:
+To create thouse four arrays you might use the following code:
 
-    $menu = new RecursiveMenu($pdo);
+$result = $db->query("SELECT * FROM catalogs");
+$catalogs = array();
+$catalogsByPID = array();
+while ($row = $result->fetch(PDO::FETCH_OBJ))
+{
+    $catalogs[$row->id] = $row;
+    if (!isset($catalogsByPID[$row->pid]))
+    {
+        $catalogsByPID[$row->pid] = array();
+    }
+    array_push($catalogsByPID[$row->pid], $row->id);
+}
+
+$result = $db->query("SELECT * FROM products");
+$products = array();
+$productsByPID = array();
+while ($row = $result->fetch(PDO::FETCH_OBJ))
+{
+    $products[$row->id] = $row;
+    if (!isset($productsByPID[$row->pid]))
+    {
+        $productsByPID[$row->pid] = array();
+    }
+    array_push($productsByPID[$row->pid], $row->id);
+}
+
+Initialize the menu with those four arrays
+
+    $menu = new RecursiveMenu($catalogs, $catalogsByPID, $products, $productsByPID);
     
 Now all you need to do is assemble the menu and render it:
 
-    $menu->assemble()->render();
+    echo $menu->assemble()->render();
     
 To customize the output, change `RecursiveMenuEntry::render()` and `RecursiveMenuEntry::renderRecursively()`.
 
