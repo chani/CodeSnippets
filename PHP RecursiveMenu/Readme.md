@@ -24,31 +24,32 @@ catalogs and catalogs2pid. Imagine the following tables:
 
 To create thouse four arrays you might use the following code:
 
-$result = $db->query("SELECT * FROM catalogs");
-$catalogs = array();
-$catalogsByPID = array();
-while ($row = $result->fetch(PDO::FETCH_OBJ))
-{
-    $catalogs[$row->id] = $row;
-    if (!isset($catalogsByPID[$row->pid]))
-    {
-        $catalogsByPID[$row->pid] = array();
-    }
-    array_push($catalogsByPID[$row->pid], $row->id);
-}
+      $result = $db->query("SELECT * FROM catalogs");
+      $catalogs = array();   
+      $catalogsByPID = array();
+      while ($row = $result->fetch(PDO::FETCH_OBJ))
+      {
+            $catalogs[$row->id] = $row;
+            if (!isset($catalogsByPID[$row->pid]))
+            {
+                  $catalogsByPID[$row->pid] = array();
+            }
+            array_push($catalogsByPID[$row->pid], $row->id);
+      }
 
-$result = $db->query("SELECT * FROM products");
-$products = array();
-$productsByPID = array();
-while ($row = $result->fetch(PDO::FETCH_OBJ))
-{
-    $products[$row->id] = $row;
-    if (!isset($productsByPID[$row->pid]))
-    {
-        $productsByPID[$row->pid] = array();
-    }
-    array_push($productsByPID[$row->pid], $row->id);
-}
+
+      $result = $db->query("SELECT * FROM products");
+      $products = array();
+      $productsByPID = array();
+      while ($row = $result->fetch(PDO::FETCH_OBJ))
+      {
+            $products[$row->id] = $row;
+            if (!isset($productsByPID[$row->pid]))
+            {
+                  $productsByPID[$row->pid] = array();
+            }
+            array_push($productsByPID[$row->pid], $row->id);
+      }
 
 Initialize the menu with those four arrays
 
